@@ -1,3 +1,9 @@
+mod scanline;
+mod polygon1;
+
 fn main() {
-    println!("Hello, world!");
+    println!("Drawing Polygon 1...");
+
+    polygon1::draw();
+
 }
