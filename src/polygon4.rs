@@ -1,7 +1,10 @@
-use crate::scanline;
-use image::{Rgb, RgbImage};
+use crate::framebuffer::Framebuffer;
 
 pub fn draw() {
+    let width = 800;
+    let height = 600;
+    let mut framebuffer = Framebuffer::new(width, height, 0x000000); // Negro como color de fondo
+
     let polygon1 = vec![
         (165, 380), (185, 360), (180, 330), (207, 345), (233, 330), (230, 360),
         (250, 380), (220, 385), (205, 410), (193, 383)
@@ -25,13 +28,13 @@ pub fn draw() {
         (682, 175), (708, 120), (735, 148), (739, 170)
     ];
 
-    let mut img = RgbImage::new(800, 600);
-    scanline::fill_polygon(&mut img, &polygon1, Rgb([255, 255, 0]), Rgb([255, 255, 255])); // Amarillo con borde blanco
-    scanline::fill_polygon(&mut img, &polygon2, Rgb([0, 0, 255]), Rgb([255, 255, 255])); // Azul con borde blanco
-    scanline::fill_polygon(&mut img, &polygon3, Rgb([255, 0, 0]), Rgb([255, 255, 255])); // Rojo con borde blanco
-    scanline::fill_polygon(&mut img, &polygon4, Rgb([0, 255, 0]), Rgb([255, 255, 255])); // Verde con borde blanco
+    framebuffer.draw_polygon(&polygon1, 0xFFFFFF, 0xFFFF00); // Borde blanco, relleno amarillo
+    framebuffer.draw_polygon(&polygon2, 0xFFFFFF, 0x0000FF); // Borde blanco, relleno azul
+    framebuffer.draw_polygon(&polygon3, 0xFFFFFF, 0xFF0000); // Borde blanco, relleno rojo
+    framebuffer.draw_polygon(&polygon4, 0xFFFFFF, 0x00FF00); // Borde blanco, relleno verde
     
-    // Agregar el agujero (polígono 5)
-    scanline::fill_polygon(&mut img, &polygon5, Rgb([0, 0, 0]), Rgb([255, 255, 255])); // Negro (asumiendo que el fondo es negro)
-    img.save("polygon4.bmp").unwrap();
+    // Agregar el agujero (polígono 5) con el color de fondo para simular un agujero
+    framebuffer.draw_polygon(&polygon5, 0xFFFFFF, 0x000000); // Borde blanco, relleno negro (color de fondo)
+    framebuffer.render_buffer("polygon4.bmp").unwrap();
+    framebuffer.display();
 }

@@ -1,4 +1,4 @@
-mod scanline;
+mod framebuffer;
 mod polygon1;
 mod polygon2;
 mod polygon3;
